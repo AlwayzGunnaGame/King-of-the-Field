@@ -1,0 +1,13 @@
+{
+  "name": "king-of-the-field",
+  "version": "0.0.1",
+  "description": "King of the Field Matchmaker",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "1.7.4",
+    "underscore": "^1.13.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
