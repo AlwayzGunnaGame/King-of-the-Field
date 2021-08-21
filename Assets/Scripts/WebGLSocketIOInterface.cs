@@ -29,8 +29,8 @@ public class WebGLSocketIOInterface : MonoBehaviour
         instance = this;
 
 #if !UNITY_WEBGL || UNITY_EDITOR
-        //sock = IO.Socket("https://mobile-party-time.herokuapp.com");
-        sock = IO.Socket("ws://localhost:3000");
+        sock = IO.Socket("https://king-of-the-field.herokuapp.com/");
+        //sock = IO.Socket("ws://localhost:3000");
 
         sock.On("d", (data) => {
             Debug.Log("msg");
