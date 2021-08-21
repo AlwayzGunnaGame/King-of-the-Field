@@ -262,6 +262,8 @@ io.on('connection', (socket) => {
 			room1Challenger = "";
 		}
 		UpdateChallengers(1);
+	  }else if(room1KingWins == room1ChallengerWins){
+		  io.to("room1").emit("d", {t: 'enable-buttons'});
 	  }
     }else if(matchRoom == "room2"){
 		room2KingWins++;
@@ -300,7 +302,9 @@ io.on('connection', (socket) => {
 			room2Challenger = "";
 		}
 			UpdateChallengers(2);
-		}
+		}else if(room2KingWins == room2ChallengerWins){
+		  io.to("room2").emit("d", {t: 'enable-buttons'});
+	  }
 	}else{
 		room3KingWins++;
 		if(room3KingWins == 2 && room3ChallengerWins == 0){
@@ -338,7 +342,9 @@ io.on('connection', (socket) => {
 			room3Challenger = "";
 		}
 			UpdateChallengers(3);
-		}
+		}else if(room3KingWins == room3ChallengerWins){
+		  io.to("room3").emit("d", {t: 'enable-buttons'});
+	  }
 	}
   });
   

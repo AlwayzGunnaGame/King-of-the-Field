@@ -36,6 +36,7 @@ public class YardMatchmaking : MonoBehaviour
     private bool partyJoin;
     private bool joiningRoom;
     private bool leavingRoom;
+    private bool enableButtons;
     private string chatToPost;
     private string inviteSender;
     private bool displayKings;
@@ -51,6 +52,8 @@ public class YardMatchmaking : MonoBehaviour
     public GameObject mainLobbyScreen;
     public GameObject lobbyScreen;
     public GameObject gameScreen;
+    public GameObject winButton;
+    public GameObject lossButton;
     public GameObject winScreen;
     public GameObject loseScreen;
     public GameObject inviteGroup;
@@ -365,6 +368,11 @@ public class YardMatchmaking : MonoBehaviour
             streak3 = data;
             updateStreaks = true;
         });
+
+        socket.On("enable-buttons", () =>
+        {
+            enableButtons = true;
+        });
     }
 
     private void Update()
@@ -408,6 +416,13 @@ public class YardMatchmaking : MonoBehaviour
         if (updateStreaks)
         {
             UpdateStreaks();
+        }
+        if (enableButtons)
+        {
+            if(isKing || isChallenger)
+            {
+                EnableButtons();
+            }
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -620,6 +635,11 @@ public class YardMatchmaking : MonoBehaviour
     {
         gameScreen.SetActive(true);
         lobbyScreen.SetActive(false);
+        if (isLeader)
+        {
+            winButton.SetActive(true);
+            lossButton.SetActive(true);
+        }
         gameKing1Text.text = lobbyKing1Text.text;
         gameKing2Text.text = lobbyKing2Text.text;
         gameKing3Text.text = lobbyKing3Text.text;
@@ -627,6 +647,8 @@ public class YardMatchmaking : MonoBehaviour
         gameChallenger2Text.text = lobbyChallenger2Text.text;
         gameChallenger3Text.text = lobbyChallenger3Text.text;
     }
+
+    
 
     private void UpdateStreaks()
     {
@@ -653,6 +675,12 @@ public class YardMatchmaking : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void EnableButtons()
+    {
+        winButton.SetActive(true);
+        lossButton.SetActive(true);
     }
 
     public void RequestRoom(string roomToJoin)
