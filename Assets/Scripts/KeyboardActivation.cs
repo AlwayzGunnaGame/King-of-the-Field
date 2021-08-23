@@ -9,6 +9,6 @@ public class KeyboardActivation : MonoBehaviour, ISelectHandler
     private TouchScreenKeyboard keyboard;
     public void OnSelect(BaseEventData eventData)
     {
-        keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+        TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
     }
 }
