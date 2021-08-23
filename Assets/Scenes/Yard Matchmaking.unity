@@ -6265,7 +6265,7 @@ MonoBehaviour:
   m_DialogTitle: Enter a Username
   m_DialogOkBtn: OK
   m_DialogCancelBtn: Cancel
-  m_DialogType: 0
+  m_DialogType: 1
 --- !u!114 &1411352891
 MonoBehaviour:
   m_ObjectHideFlags: 0
