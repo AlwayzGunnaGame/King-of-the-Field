@@ -592,16 +592,19 @@ public class YardMatchmaking : MonoBehaviour
                 lobbyKing1Text.text = king1;
                 lobbyKing2Text.text = king2;
                 lobbyKing3Text.text = king3;
+                gameKing1Text.text = king1;
                 break;
             case "room2":
                 lobbyKing1Text.text = king4;
                 lobbyKing2Text.text = king5;
                 lobbyKing3Text.text = king6;
+                gameKing1Text.text = king4;
                 break;
             case "room3":
                 lobbyKing1Text.text = king7;
                 lobbyKing2Text.text = king8;
                 lobbyKing3Text.text = king9;
+                gameKing1Text.text = king7;
                 break;
             default:
                 break;

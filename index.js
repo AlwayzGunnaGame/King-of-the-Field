@@ -528,20 +528,26 @@ io.on('connection', (socket) => {
 		room1KingWins = 4;
 		clients[room1King].emit("d", {t:'free-win'});
 	}else if(room1King == socket.username){
+		if(room1Challenger != ""){
 		room1ChallengerWins = 4;
 		clients[room1Challenger].emit("d", {t:'free-win'});
+		}
 	}else if(room2Challenger == socket.username){
 		room2KingWins = 4;
 		clients[room2King].emit("d", {t:'free-win'});
 	}else if(room2King == socket.username){
+		if(room2Challenger != ""){
 		room2ChallengerWins = 4;
 		clients[room2Challenger].emit("d", {t:'free-win'});
+		}
 	}else if(room3Challenger == socket.username){
 		room3KingWins = 4;
 		clients[room3King].emit("d", {t:'free-win'});
 	}else if(room3King == socket.username){
+		if(room3Challenger != ""){
 		room3ChallengerWins = 4;
-		clients[room3Challenger].emit("d", {t:'free-win'});
+		clients[room3Challener].emit("d", {t:'free-win'});
+		}
 	}
 	delete clients[socket.username];
 	if(rooms[socket.username]){
