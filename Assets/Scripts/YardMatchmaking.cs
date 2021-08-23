@@ -12,7 +12,7 @@ public class YardMatchmaking : MonoBehaviour
 {
     public List<string> randomWordList;
     private WebGLSocketIOInterface socket;
-    public InputField usernameField;
+    public WebGLNativeInputField usernameField;
     public InputField chatTextField;
     public InputField inviteField;
     public InputField partyChatField;
@@ -44,6 +44,7 @@ public class YardMatchmaking : MonoBehaviour
     private bool isKing;
     private bool isChallenger;
     private bool updateStreaks;
+    private bool freeWin;
     private string streak1;
     private string streak2;
     private string streak3;
@@ -373,6 +374,11 @@ public class YardMatchmaking : MonoBehaviour
         {
             enableButtons = true;
         });
+
+        socket.On("free-win", () =>
+        {
+            freeWin = true;
+        });
     }
 
     private void Update()
@@ -404,7 +410,7 @@ public class YardMatchmaking : MonoBehaviour
         }
         if (isKing || isChallenger)
         {
-            if (!string.IsNullOrEmpty(lobbyChallenger3Text.text))
+            if (!string.IsNullOrEmpty(lobbyChallenger1Text.text))
             {
                 StartMatch();
             }
@@ -416,6 +422,11 @@ public class YardMatchmaking : MonoBehaviour
         if (updateStreaks)
         {
             UpdateStreaks();
+        }
+        if (freeWin)
+        {
+            freeWin = false;
+            Win();
         }
         if (enableButtons)
         {
