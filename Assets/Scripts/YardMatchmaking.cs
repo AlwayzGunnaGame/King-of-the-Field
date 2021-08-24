@@ -629,16 +629,19 @@ public class YardMatchmaking : MonoBehaviour
                 lobbyChallenger1Text.text = challenger1;
                 lobbyChallenger2Text.text = challenger2;
                 lobbyChallenger3Text.text = challenger3;
+                gameChallenger1Text.text = challenger1; 
                 break;
             case "room2":
                 lobbyChallenger1Text.text = challenger4;
                 lobbyChallenger2Text.text = challenger5;
                 lobbyChallenger3Text.text = challenger6;
+                gameChallenger1Text.text = challenger4;
                 break;
             case "room3":
                 lobbyChallenger1Text.text = challenger7;
                 lobbyChallenger2Text.text = challenger8;
                 lobbyChallenger3Text.text = challenger9;
+                gameChallenger1Text.text = challenger7;
                 break;
             default:
                 break;
