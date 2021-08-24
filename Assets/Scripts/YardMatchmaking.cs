@@ -756,6 +756,7 @@ public class YardMatchmaking : MonoBehaviour
 
     private void StartMatch()
     {
+        Debug.Log(lobbyChallenger1Text.text + " JSDAFJDSFJSDAFJSDAJFSDAJFASJDFJ");
         gameScreen.SetActive(true);
         lobbyScreen.SetActive(false);
         if (isLeader)
