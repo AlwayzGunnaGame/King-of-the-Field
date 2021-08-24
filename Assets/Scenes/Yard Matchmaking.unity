@@ -1246,7 +1246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoomOutMin: 200
-  zoomOutMax: 1200
+  zoomOutMax: 2000
 --- !u!1 &112967087
 GameObject:
   m_ObjectHideFlags: 0
