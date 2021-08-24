@@ -678,18 +678,18 @@ io.on('connection', (socket) => {
 	}else if(room3King == socket.username){
 		if(room3Challenger != ""){
 		room3ChallengerWins = 4;
-		clients[room3Challener].emit("d", {t:'free-win'});
+		clients[room3Challenger].emit("d", {t:'free-win'});
 		}else{
 		room3King = "";
 		UpdateKings(3);
 		}
-	}else if(room4Challener == socket.username){
+	}else if(room4Challenger == socket.username){
 		room4KingWins = 4;
 		clients[room4King].emit("d", {t: 'free-win'});
 	}else if(room4King == socket.username){
 		if(room4Challenger != ""){
-			room3ChallenerWins = 4;
-			clients[room4Challener].emit("d", {t: 'free-win'});
+			room3ChallengerWins = 4;
+			clients[room4Challenger].emit("d", {t: 'free-win'});
 		}else{
 			room4King = "";
 			UpdateKings(4);
