@@ -532,8 +532,8 @@ io.on('connection', (socket) => {
 		room1ChallengerWins = 4;
 		clients[room1Challenger].emit("d", {t:'free-win'});
 		}else{
-			UpdateChallengers(1);
-		UpdateKings(1);
+			room1King = "";
+			UpdateKings(1);
 		}
 	}else if(room2Challenger == socket.username){
 		room2KingWins = 4;
@@ -543,8 +543,8 @@ io.on('connection', (socket) => {
 		room2ChallengerWins = 4;
 		clients[room2Challenger].emit("d", {t:'free-win'});
 		}else{
-			UpdateChallengers(2);
-		UpdateKings(2);
+			room2King = "";
+			UpdateKings(2);
 		}
 	}else if(room3Challenger == socket.username){
 		room3KingWins = 4;
@@ -554,7 +554,7 @@ io.on('connection', (socket) => {
 		room3ChallengerWins = 4;
 		clients[room3Challener].emit("d", {t:'free-win'});
 		}else{
-		UpdateChallengers(3);
+		room3King = "";
 		UpdateKings(3);
 		}
 	}
