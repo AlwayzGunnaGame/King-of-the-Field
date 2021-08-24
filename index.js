@@ -15,21 +15,27 @@ var clients = {};
 var room1Queue = [];
 var room2Queue = [];
 var room3Queue = [];
+var room4Queue = [];
 var room1Streak = 0;
 var room2Streak = 0;
 var room3Streak = 0;
+var room4Streak = 0;
 var room1King = "";
 var room2King = "";
 var room3King = "";
+var room4King = "";
 var room1Challenger = "";
 var room2Challenger = "";
 var room3Challenger = "";
+var room4Challenger = "";
 var room1KingWins = 0;
 var room2KingWins = 0;
 var room3KingWins = 0;
+var room4KingWins = 0;
 var room1ChallengerWins = 0;
 var room2ChallengerWins = 0;
 var room3ChallengerWins = 0;
+var room4ChallengerWins = 0;
 
 let room = 0;
 let player1Rdy = 0;
@@ -45,6 +51,7 @@ const {createRoom, joinRoom, exitRoom, rooms} = require("./util/rooms");
 createRoom("room1");
 createRoom("room2");
 createRoom("room3");
+createRoom("room4");
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -84,12 +91,15 @@ io.on('connection', (socket) => {
 	  UpdateChallengers(1);
 	  UpdateChallengers(2);
 	  UpdateChallengers(3);
+	  UpdateChallengers(4);
 	  UpdateKings(1);
 	  UpdateKings(2);
+	  UpdateKings(3);
 	  UpdateKings(3);
 	  clients[socket.username].emit("d", {t:'update-1-streak', d: room1Streak});
 	  clients[socket.username].emit("d", {t:'update-2-streak', d: room2Streak});
 	  clients[socket.username].emit("d", {t:'update-3-streak', d: room3Streak});
+	  clients[socket.username].emit("d", {t:'update-4-streak', d: room3Streak});
   }
 
   var UpdateKings = function(roomNum){
@@ -109,7 +119,7 @@ io.on('connection', (socket) => {
 	io.emit("d", {t:'new-king-2', d:room2King});
         console.log(room2King, " is now the king of room 2");
     //  }
-    }else{
+    }else if(roomNum == 3){
       //var newKings = io.sockets.adapter.rooms[room3King].sockets;
       io.emit("d", {t:'clear-kings', d:3});
       //for(var king in newKings){
@@ -117,6 +127,10 @@ io.on('connection', (socket) => {
 	io.emit("d", {t:'new-king-3', d:room3King});
         console.log(room3King, " is now the king of room 3");
 	//	}
+	}else{
+		io.emit("d", {t:'clear-kings', d:4});
+		io.emit("d", {t:'new-king-4', d:room4King});
+        console.log(room4King, " is now the king of room 4");
 	}
   }
 
@@ -143,7 +157,7 @@ io.on('connection', (socket) => {
       //}
 		}
 		
-    }else{
+    }else if(roomNum == 3){
 		io.emit("d", {t:'clear-challengers', d:3});
 		if(room3Challenger != ""){
       //var newChallengers = io.sockets.adapter.rooms[room3Challenger].sockets;
@@ -151,6 +165,14 @@ io.on('connection', (socket) => {
 	//var clientSocket = io.sockets.connected[challenger];
 	io.emit("d", {t:'new-challenger-3', d:room3Challenger});
         console.log(room3Challenger, " is now the challenger of room 3");
+		//}
+		}
+		
+	}else{
+		io.emit("d", {t:'clear-challengers', d:4});
+		if(room4Challenger != ""){
+		io.emit("d", {t:'new-challenger-4', d:room4Challenger});
+        console.log(room4Challenger, " is now the challenger of room 4");
 		//}
 		}
 		
@@ -224,7 +246,7 @@ io.on('connection', (socket) => {
       room2Queue.push(socket.username);
       console.log(room2Queue);
       }
-    }else{
+    }else if (requestedRoom == "room3"){
       if(room3King == ""){
 	room3King = socket.username;
 	UpdateKings(3);
@@ -234,6 +256,17 @@ io.on('connection', (socket) => {
       }else{
       room3Queue.push(socket.username);
       console.log(room3Queue);
+      }
+    }else{
+      if(room4King == ""){
+	room4King = socket.username;
+	UpdateKings(4);
+      }else if(room4Challenger == ""){
+	room4Challenger = socket.username;
+	UpdateChallengers(4);
+      }else{
+      room4Queue.push(socket.username);
+      console.log(room4Queue);
       }
     }
 	clients[socket.username].emit("d", {t:'join-room', d:requestedRoom});
@@ -332,7 +365,7 @@ io.on('connection', (socket) => {
 		}else if(room2KingWins == room2ChallengerWins){
 		  io.to("room2").emit("d", {t: 'enable-buttons'});
 	  }
-	}else{
+	}else if (matchRoom == "room3"){
 		room3KingWins++;
 		if(room3KingWins == 2 && room3ChallengerWins == 0){
 			io.emit("d", {t:'king-win', d: matchRoom});
@@ -377,6 +410,52 @@ io.on('connection', (socket) => {
 			UpdateChallengers(3);
 		}else if(room3KingWins == room3ChallengerWins){
 		  io.to("room3").emit("d", {t: 'enable-buttons'});
+	  }
+	}else{
+		room4KingWins++;
+		if(room4KingWins == 2 && room4ChallengerWins == 0){
+			io.emit("d", {t:'king-win', d: matchRoom});
+			room4KingWins = 0;
+			room4Streak++;
+			io.emit("d", {t:'update-4-streak', d: room4Streak});
+			
+			io.to(room4Challenger).emit("d", {t: 'leave-room'});
+			if(io.sockets.adapter.rooms[room4Challenger] != undefined){
+		var partyMembers = io.sockets.adapter.rooms[room4Challenger].sockets;
+		for(var member in partyMembers){
+			var clientSocket = io.sockets.connected[member];
+			clientSocket.leave(matchRoom);
+		}
+			}
+		if(room4Queue.length > 0){
+			room4Challenger = room4Queue.shift();
+		}else{
+			room4Challenger = "";
+		}
+			UpdateChallengers(4);
+		}else if(room4KingWins >= 4){
+			io.emit("d", {t:'king-win', d: matchRoom});
+			room4KingWins = 0;
+			room4ChallengerWins = 0;
+			room4Streak++;
+			io.emit("d", {t:'update-4-streak', d: room4Streak});
+			
+			io.to(room4Challenger).emit("d", {t: 'leave-room'});
+			if(io.sockets.adapter.rooms[room4Challenger] != undefined){
+		var partyMembers = io.sockets.adapter.rooms[room4Challenger].sockets;
+		for(var member in partyMembers){
+			var clientSocket = io.sockets.connected[member];
+			clientSocket.leave(matchRoom);
+		}
+			}
+		if(room4Queue.length > 0){
+			room4Challenger = room4Queue.shift();
+		}else{
+			room4Challenger = "";
+		}
+			UpdateChallengers(4);
+		}else if(room4KingWins == room4ChallengerWins){
+		  io.to("room4").emit("d", {t: 'enable-buttons'});
 	  }
 	}
   });
@@ -470,7 +549,7 @@ io.on('connection', (socket) => {
 		UpdateChallengers(2);
 		UpdateKings(2);
 	  }
-	}else{
+	}else if(matchRoom == "room3"){
 		room3ChallengerWins++;
       if(room3ChallengerWins == 2 && room3KingWins == 0){
 		io.emit("d", {t:'challenger-win', d: matchRoom});
@@ -514,6 +593,50 @@ io.on('connection', (socket) => {
 		UpdateChallengers(3);
 		UpdateKings(3);
 	  }
+	}else{
+		room4ChallengerWins++;
+      if(room4ChallengerWins == 2 && room4KingWins == 0){
+		io.emit("d", {t:'challenger-win', d: matchRoom});
+		room4ChallengerWins = 0;
+		room4Streak = 1;
+		io.emit("d", {t:'update-4-streak', d: room4Streak});
+		
+		io.to(room4King).emit("d", {t: 'leave-room'});
+		if(io.sockets.adapter.rooms[room4King] != undefined){
+		var partyMembers = io.sockets.adapter.rooms[room4King].sockets;
+		for(var member in partyMembers){
+			var clientSocket = io.sockets.connected[member];
+			clientSocket.leave(matchRoom);
+		}
+		}
+		room4King = room4Challenger;
+		if(room4Queue.length > 0){
+			room4Challenger = room4Queue.shift();
+		}
+		UpdateChallengers(4);
+		UpdateKings(4);
+      }else if(room4ChallengerWins >= 4){
+		io.emit("d", {t:'challenger-win', d: matchRoom});
+		room4ChallengerWins = 0;
+		room4KingWins = 0;
+		room4Streak = 1;
+		io.emit("d", {t:'update-4-streak', d: room4Streak});
+		
+		io.to(room4King).emit("d", {t: 'leave-room'});
+		if(io.sockets.adapter.rooms[room4King] != undefined){
+		var partyMembers = io.sockets.adapter.rooms[room4King].sockets;
+		for(var member in partyMembers){
+			var clientSocket = io.sockets.connected[member];
+			clientSocket.leave(matchRoom);
+		}
+		}
+		room4King = room4Challenger;
+		if(room4Queue.length > 0){
+			room4Challenger = room4Queue.shift();
+		}
+		UpdateChallengers(4);
+		UpdateKings(4);
+	  }
 	}
   });
   
@@ -524,6 +647,8 @@ io.on('connection', (socket) => {
 		delete room2Queue[socket.username];
 	}else if (room3Queue[socket.username]){
 		delete room3Queue[socket.username];
+	}else if(room4Queue[socket.username]){
+		delete room4Queue[socket.username];
 	}
 	else if(room1Challenger == socket.username){
 		room1KingWins = 4;
@@ -558,6 +683,17 @@ io.on('connection', (socket) => {
 		room3King = "";
 		UpdateKings(3);
 		}
+	}else if(room4Challener == socket.username){
+		room4KingWins = 4;
+		clients[room4King].emit("d", {t: 'free-win'});
+	}else if(room4King == socket.username){
+		if(room4Challenger != ""){
+			room3ChallenerWins = 4;
+			clients[room4Challener].emit("d", {t: 'free-win'});
+		}else{
+			room4King = "";
+			UpdateKings(4);
+		}
 	}
 	delete clients[socket.username];
 	if(rooms[socket.username]){
@@ -588,7 +724,13 @@ io.on('connection', (socket) => {
     console.log("Chat started");
     var finalMessage = "";
     finalMessage = (socket.username + ': '+ msg);
-    io.to('room1').emit("d", {t:'chat message', d:finalMessage});
+    io.to('room3').emit("d", {t:'chat message', d:finalMessage});
+  });
+  socket.on('room4 chat message', (msg) => {
+    console.log("Chat started");
+    var finalMessage = "";
+    finalMessage = (socket.username + ': '+ msg);
+    io.to('room4').emit("d", {t:'chat message', d:finalMessage});
   });
 });
 

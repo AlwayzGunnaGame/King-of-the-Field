@@ -22,6 +22,7 @@ public class YardMatchmaking : MonoBehaviour
     public Text streak1Text;
     public Text streak2Text;
     public Text streak3Text;
+    public Text streak4Text;
     public Text streakLobby;
     public Text streakGame;
     public TextMeshProUGUI partyMember1;
@@ -48,8 +49,10 @@ public class YardMatchmaking : MonoBehaviour
     private string streak1;
     private string streak2;
     private string streak3;
+    private string streak4;
     //public string[] randomWords;
     public GameObject loginScreen;
+    public GameObject consoleScreen;
     public GameObject mainLobbyScreen;
     public GameObject lobbyScreen;
     public GameObject gameScreen;
@@ -74,6 +77,9 @@ public class YardMatchmaking : MonoBehaviour
     public Text king7Text;
     public Text king8Text;
     public Text king9Text;
+    public Text king10Text;
+    public Text king11Text;
+    public Text king12Text;
     public Text lobbyKing1Text;
     public Text lobbyKing2Text;
     public Text lobbyKing3Text;
@@ -89,6 +95,9 @@ public class YardMatchmaking : MonoBehaviour
     public Text challenger7Text;
     public Text challenger8Text;
     public Text challenger9Text;
+    public Text challenger10Text;
+    public Text challenger11Text;
+    public Text challenger12Text;
     public Text lobbyChallenger1Text;
     public Text lobbyChallenger2Text;
     public Text lobbyChallenger3Text;
@@ -104,6 +113,9 @@ public class YardMatchmaking : MonoBehaviour
     private string king7;
     private string king8;
     private string king9;
+    private string king10;
+    private string king11;
+    private string king12;
     private string challenger1;
     private string challenger2;
     private string challenger3;
@@ -113,6 +125,9 @@ public class YardMatchmaking : MonoBehaviour
     private string challenger7;
     private string challenger8;
     private string challenger9;
+    private string challenger10;
+    private string challenger11;
+    private string challenger12;
 
 
     void Start()
@@ -197,6 +212,11 @@ public class YardMatchmaking : MonoBehaviour
                     king8 = "";
                     king9 = "";
                     break;
+                case 4:
+                    king10 = "";
+                    king11 = "";
+                    king12 = "";
+                    break;
             }
             displayKings = true;
         });
@@ -221,6 +241,11 @@ public class YardMatchmaking : MonoBehaviour
                     challenger7 = "";
                     challenger8 = "";
                     challenger9 = "";
+                    break;
+                case 4:
+                    challenger10 = "";
+                    challenger11 = "";
+                    challenger12 = "";
                     break;
             }
             displayChallengers = true;
@@ -281,6 +306,27 @@ public class YardMatchmaking : MonoBehaviour
             else
             {
                 king9 = data;
+            }
+            if (nickname == data)
+            {
+                isKing = true;
+            }
+            displayKings = true;
+        });
+
+        socket.On("new-king-4", data =>
+        {
+            if (string.IsNullOrEmpty(king10))
+            {
+                king10 = data;
+            }
+            else if (string.IsNullOrEmpty(king11))
+            {
+                king11 = data;
+            }
+            else
+            {
+                king12 = data;
             }
             if (nickname == data)
             {
@@ -352,6 +398,27 @@ public class YardMatchmaking : MonoBehaviour
             displayChallengers = true;
         });
 
+        socket.On("new-challenger-4", data =>
+        {
+            if (string.IsNullOrEmpty(challenger10))
+            {
+                challenger10 = data;
+            }
+            else if (string.IsNullOrEmpty(challenger11))
+            {
+                challenger11 = data;
+            }
+            else
+            {
+                challenger12 = data;
+            }
+            if (nickname == data)
+            {
+                isChallenger = true;
+            }
+            displayChallengers = true;
+        });
+
         socket.On("update-1-streak", data =>
         {
             streak1 = data;
@@ -367,6 +434,12 @@ public class YardMatchmaking : MonoBehaviour
         socket.On("update-3-streak", data =>
         {
             streak3 = data;
+            updateStreaks = true;
+        });
+
+        socket.On("update-4-streak", data =>
+        {
+            streak4 = data;
             updateStreaks = true;
         });
 
@@ -461,6 +534,10 @@ public class YardMatchmaking : MonoBehaviour
         {
             socket.Emit("room3 chat message", lobbyChatField.text);
         }
+        else if (chatRoom == 4)
+        {
+            socket.Emit("room4 chat message", lobbyChatField.text);
+        }
     }
 
     public void PartyChat()
@@ -491,7 +568,8 @@ public class YardMatchmaking : MonoBehaviour
         {
             nickname = usernameField.text;
             loginScreen.SetActive(false);
-            mainLobbyScreen.SetActive(true);
+            consoleScreen.SetActive(true);
+            //mainLobbyScreen.SetActive(true);
             partyMember1.text = nickname;
             socket.Emit("set-name", nickname);
         }
@@ -531,6 +609,7 @@ public class YardMatchmaking : MonoBehaviour
     {
         joiningRoom = false;
         lobbyScreen.SetActive(true);
+        consoleScreen.SetActive(false);
         mainLobbyScreen.SetActive(false);
         switch (roomToJoin)
         {
@@ -561,6 +640,15 @@ public class YardMatchmaking : MonoBehaviour
                 lobbyChallenger2Text.text = challenger8;
                 lobbyChallenger3Text.text = challenger9;
                 break;
+            case "room4":
+                chatRoom = 4;
+                lobbyKing1Text.text = king10;
+                lobbyKing2Text.text = king11;
+                lobbyKing3Text.text = king12;
+                lobbyChallenger1Text.text = challenger10;
+                lobbyChallenger2Text.text = challenger11;
+                lobbyChallenger3Text.text = challenger12;
+                break;
         }
     }
 
@@ -586,6 +674,9 @@ public class YardMatchmaking : MonoBehaviour
         king7Text.text = king7;
         king8Text.text = king8;
         king9Text.text = king9;
+        king10Text.text = king10;
+        king11Text.text = king11;
+        king12Text.text = king12;
         switch (roomToJoin)
         {
             case "room1":
@@ -606,6 +697,12 @@ public class YardMatchmaking : MonoBehaviour
                 lobbyKing3Text.text = king9;
                 gameKing1Text.text = king7;
                 break;
+            case "room4":
+                lobbyKing1Text.text = king10;
+                lobbyKing2Text.text = king11;
+                lobbyKing3Text.text = king12;
+                gameKing1Text.text = king10;
+                break;
             default:
                 break;
         }
@@ -623,6 +720,9 @@ public class YardMatchmaking : MonoBehaviour
         challenger7Text.text = challenger7;
         challenger8Text.text = challenger8;
         challenger9Text.text = challenger9;
+        challenger10Text.text = challenger10;
+        challenger11Text.text = challenger11;
+        challenger12Text.text = challenger12;
         switch (roomToJoin)
         {
             case "room1":
@@ -642,6 +742,12 @@ public class YardMatchmaking : MonoBehaviour
                 lobbyChallenger2Text.text = challenger8;
                 lobbyChallenger3Text.text = challenger9;
                 gameChallenger1Text.text = challenger7;
+                break;
+            case "room4":
+                lobbyChallenger1Text.text = challenger10;
+                lobbyChallenger2Text.text = challenger11;
+                lobbyChallenger3Text.text = challenger12;
+                gameChallenger1Text.text = challenger10;
                 break;
             default:
                 break;
@@ -687,6 +793,10 @@ public class YardMatchmaking : MonoBehaviour
             case 3:
                 streakLobby.text = streak3;
                 streakGame.text = streak3;
+                break;
+            case 4:
+                streakLobby.text = streak4;
+                streakGame.text = streak4;
                 break;
 
             default:
