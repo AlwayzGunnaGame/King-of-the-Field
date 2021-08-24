@@ -402,6 +402,7 @@ io.on('connection', (socket) => {
 			room1Challenger = room1Queue.shift();
 		}else{
 			room1Challenger = "";
+			console.log("No Challenger available");
 		}
 		UpdateChallengers(1);
 		UpdateKings(1);
