@@ -28,7 +28,7 @@ public class PanZoom : MonoBehaviour
 
             float difference = currentMagnitude - prevMagnitude;
 
-            Zoom(-difference);
+            Zoom(-difference * 50);
         }
         else if (Input.GetMouseButton(0))
         {
