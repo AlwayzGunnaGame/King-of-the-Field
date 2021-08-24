@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
 	  UpdateKings(1);
 	  UpdateKings(2);
 	  UpdateKings(3);
-	  UpdateKings(3);
+	  UpdateKings(4);
 	  clients[socket.username].emit("d", {t:'update-1-streak', d: room1Streak});
 	  clients[socket.username].emit("d", {t:'update-2-streak', d: room2Streak});
 	  clients[socket.username].emit("d", {t:'update-3-streak', d: room3Streak});
